@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" >
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+        <title><ui:insert name="title">WeldExamples Application</ui:insert></title>
+
+        <h:outputStylesheet name="default.css" library="css" />
+        <h:outputStylesheet name="cssLayout.css" library="css" />
+        <!-- For Community Themes except 'Luna' and 'Nova' theme -->
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces"/>
+
+        <!--
+        <h:outputStylesheet name="myCSS.css" library="css" />
+        -->
+
+        <ui:insert name="head"></ui:insert>
+
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">
+                <h1>Weld Examples Application - UNEXPECTED ERROR</h1>
+            </ui:insert>
+        </div>
+        <div id="content" class="center_content">
+            <ui:insert name="content">The content goes here</ui:insert>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">
+                <h:form>
+                    <p:link href="#{request.contextPath}/" value="home" >Go Home</p:link>
+                </h:form>
+            </ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

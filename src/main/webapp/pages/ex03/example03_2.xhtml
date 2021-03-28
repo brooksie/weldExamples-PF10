@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Login User2
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Login User2</h1>
+
+        <h:form>
+            <p:focus/>
+            
+            <p:panelGrid columns="3" rendered="#{!login2.loggedIn}">
+                <p:outputLabel for="@next" value="Username:" />
+                <p:inputText id="username" value="#{credentials.username}" 
+                             required="true" 
+                             />
+                <p:message for="@previous"/>
+
+                <p:outputLabel for="@next" value="Password:"/>
+                <h:inputSecret id="password" value="#{credentials.password}"
+                               converter="charArrayConverter" 
+                               required="true"
+                               />
+                <p:message for="@previous" />
+            </p:panelGrid>
+
+            <h:panelGroup rendered="#{login2.loggedIn}">
+                Signed in as #{currentUser2}
+                <br/>
+            </h:panelGroup>
+
+            <p:messages globalOnly="true" />
+
+            <p:commandButton value="Login" action="#{login2.login}" rendered="#{!login2.loggedIn}"
+                             update="@form" />
+            <p:commandButton value="Logout" action="#{login2.logout}" rendered="#{login2.loggedIn}"
+                             update="@form" />
+            
+            <br/><br/>
+            
+            <p:commandButton value="Manage users" action="example03_2_manage" immediate="true" />
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

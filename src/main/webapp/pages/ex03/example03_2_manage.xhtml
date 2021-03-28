@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Manage Users
+    </ui:define>
+    
+    <ui:define name="head" >
+        <script type="text/javascript">
+    function handleAddRequest(xhr, status, args) {
+        if(args.validationFailed || !args.added) {
+            PF('dlgAdd').jq.effect("shake", {times:5}, 100);
+        }
+        else {
+            PF('dlgAdd').hide();
+        }
+    }
+    function handleEditRequest(xhr, status, args) {
+        if(args.validationFailed || !args.edited) {
+            PF('dlgEdit').jq.effect("shake", {times:5}, 100);
+        }
+        else {
+            PF('dlgEdit').hide();
+        }
+    }
+    function handleDeleteRequest(xhr, status, args) {
+        if(args.validationFailed || !args.deleted) {
+            PF('dlgDelete').jq.effect("shake", {times:5}, 100);
+        }
+        else {
+            PF('dlgDelete').hide();
+        }
+    }
+</script>
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Manage Users</h1>
+
+        <h:form id="usrListFrm">
+            <p:growl />
+            <p:dataTable id="usrListTbl" var="usr" value="#{userManageController.userList}" >
+
+                <p:column style="width:32px;text-align: center" >
+                    <p:commandButton icon="fa fa-pencil" title="change password" 
+                                     update=":editDlgFrm:editDlgGrd" 
+                                     oncomplete="PF('dlgEdit').show()" >
+                        <f:setPropertyActionListener value="#{usr}" target="#{userManageController.selectedUser}" />
+                    </p:commandButton>
+                </p:column>
+
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton icon="fa fa-times" title="delete user" 
+                                     update=":deleteDlgFrm:deleteDlgGrd" 
+                                     oncomplete="PF('dlgDelete').show()" >
+                        <f:setPropertyActionListener value="#{usr}" target="#{userManageController.selectedUser}" />
+                    </p:commandButton>
+                </p:column>
+
+                <p:column headerText="ID" width="50" >
+                    <p:outputLabel value="#{usr.id}" />
+                </p:column>
+
+                <p:column headerText="Username" width="100" >
+                    <p:outputLabel value="#{usr.username}" />
+                </p:column>
+
+                <p:column headerText="password hash" >
+                    <p:outputLabel value="#{usr.passwordhash}" />
+                </p:column>
+
+            </p:dataTable>
+            <p:commandButton icon="fa fa-plus" value="New" title="new user"
+                             type="button" onclick="PF('dlgAdd').show();"
+                             update="@form" 
+                             />
+            <p/>
+            <p:commandButton icon="fa fa-chevron-left" value="Return" action="example03_2" immediate="true" />
+
+        </h:form>
+
+
+        <p:dialog header="Add User" widgetVar="dlgAdd" modal="true" >
+
+            <h:form id="addDlgFrm">
+
+                <p:panelGrid columns="3" id="addDlgGrd">
+                    <p:outputLabel for="@next" value="Username:" />
+                    <p:inputText id="username" value="#{credentials.username}" 
+                                 required="true" 
+                                 validator="#{userManageController.validateNewUsername}"
+                                 />
+                    <p:message for="@previous"/>
+
+                    <p:outputLabel for="@next" value="Password:"/>
+                    <h:inputSecret id="password" value="#{credentials.password}"
+                                   converter="charArrayConverter" required="true"
+                                   />
+                    <p:message for="@previous" />
+                </p:panelGrid>
+
+                <p:commandButton icon="fa fa-check" title="add this user"
+                                 value="Add" action="#{userManageController.addAction}"
+                                 update="@form :usrListFrm:usrListTbl"
+                                 oncomplete="handleAddRequest(xhr, status, args)"/>
+            </h:form>
+
+        </p:dialog> 
+        
+        <p:dialog header="Change Password" widgetVar="dlgEdit" modal="true" >
+
+            <h:form id="editDlgFrm">
+
+                <p:panelGrid columns="3" id="editDlgGrd">
+                    <p:outputLabel for="@next" value="Username:" />
+                    <p:inputText id="username" value="#{userManageController.selectedUser.username}" 
+                                 required="true" readonly="true"
+                                 />
+                    <p:message for="@previous"/>
+
+                    <p:outputLabel for="@next" value="Password:"/>
+                    <h:inputSecret id="password" value="#{credentials.password}"
+                                   converter="charArrayConverter" required="true"
+                                   />
+                    <p:message for="@previous" />
+                </p:panelGrid>
+
+                <p:commandButton icon="fa fa-check" title="save the changes to this user" 
+                                 value="Save" action="#{userManageController.editAction}"
+                                 update="@form :usrListFrm:usrListTbl"
+                                 oncomplete="handleEditRequest(xhr, status, args)"/>
+            </h:form>
+
+        </p:dialog> 
+
+        <p:dialog header="Delete User" widgetVar="dlgDelete" modal="true" >
+
+            <h:form id="deleteDlgFrm">
+
+                <p:panelGrid columns="3" id="deleteDlgGrd">
+                    <p:outputLabel for="@next" value="Username:" />
+                    <p:inputText id="username" value="#{userManageController.selectedUser.username}" 
+                                 readonly="true"
+                                 />
+                    <p:message for="@previous"/>
+
+                    <p:outputLabel for="@next" value="Password:"/>
+                    <p:inputText id="password" value="#{userManageController.selectedUser.passwordhash}"
+                                 readonly="true"
+                                 />
+                    <p:message for="@previous" />
+                </p:panelGrid>
+
+                <p:commandButton icon="fa fa-check" title="delete this user" 
+                                 value="Delete" action="#{userManageController.deleteAction}"
+                                 update="@form :usrListFrm:usrListTbl"
+                                 oncomplete="handleDeleteRequest(xhr, status, args)"/>
+            </h:form>
+
+        </p:dialog> 
+
+    </ui:define>
+
+</ui:composition>

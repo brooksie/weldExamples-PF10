@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">
+        Intercept page
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Intercept Page</h1>
+
+        <h:form>
+            <p:outputLabel for="@next" value="Interceptor log" /><br/>
+            <p:inputTextarea cols="120" value="#{myLoggerBean.log}"
+                             rows="12" autoResize="false" readonly="true"
+                             style="font-size: 8pt;"/>
+
+            <p/>
+
+            <p:commandButton value="invoke beans" icon="fa fa-check"
+                             action="#{interceptPageController.doIt}"
+                             update="@form" />
+            <p:commandButton value="Clear log" icon="fa fa-backward"
+                             action="#{interceptPageController.clear}"
+                             update="@form" />
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

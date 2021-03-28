@@ -1,0 +1,71 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Many-To-Many Example
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Many To Many Example (Drinks and Condiments)</h1>
+        <br/>
+
+        <h:form>
+            <p:dataTable value="#{drinkCatalog}" var="drink" >
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" 
+                          toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{drinkListController.editAction}"
+                                         icon="fa fa-pencil" title="edit the drink" >
+                            <f:setPropertyActionListener value="#{drink}" 
+                                                         target="#{drinkListController.selectedDrink}" />
+                            <p:ajax event="dialogReturn" update="@form" 
+                                    listener="#{drinkListController.onEditReturn}"/>
+                        </p:commandButton>
+                        <p:commandButton action="#{drinkListController.deleteAction}"
+                                         icon="fa fa-times" title="delete the drink" >
+                            <f:setPropertyActionListener value="#{drink}" 
+                                                         target="#{drinkListController.selectedDrink}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+                    
+                <p:column headerText="Id" style="width:80px;">
+                    #{drink.id}
+                </p:column>
+                
+                <p:column headerText="Name" >
+                    <p:commandLink action="#{drinkListController.viewAction}" title="view the drink" >
+                        #{drink.name}
+                        <f:setPropertyActionListener value="#{drink}" 
+                                                     target="#{drinkListController.selectedDrink}" />
+                    </p:commandLink>
+                </p:column>
+
+                <p:column headerText="Condiments">
+
+                    <ui:repeat var="drinkCondiment" value="#{drink.condiments}" varStatus="status">
+                        #{status.index eq 0 ? "":"; "}#{drinkCondiment.condiment.name}
+                    </ui:repeat>
+
+                </p:column>
+                
+            </p:dataTable>
+            <p:commandButton value="New" icon="fa fa-plus" 
+                             action="#{drinkListController.addAction}">
+                <p:ajax event="dialogReturn" update="@form" 
+                        listener="#{drinkListController.onAddReturn}" />
+            </p:commandButton>
+            
+            <p:commandButton value="Maintain Condiments" icon="pi pi-cog" 
+                             immediate="true"
+                             action="condimentList" style="float: right"/>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

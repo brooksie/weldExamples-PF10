@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/dlgTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions">
+
+    <ui:define name="title">
+        #{tagController.mode} a Tag
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:focus />
+            <p:growl globalOnly="true" showDetail="true" />
+
+            <p:panelGrid id="pnl" columns="3" rendered="#{tagController.mode eq 'Add' or tagController.mode eq 'Edit' }" >
+
+                <p:outputLabel for="a_id" value="Id:" />
+                <h:panelGroup >
+                    <h:panelGroup rendered="#{tagController.mode eq 'Edit'}" >
+                        <h:outputText id="a_id" value="#{tagBean.id}" />
+                    </h:panelGroup>
+                </h:panelGroup>
+                <p:message for="a_id" id="a_cdMsg"/>
+
+                <p:outputLabel for="@next" value="Name:" />
+                <p:inputText id="a_name" value="#{tagBean.name}" 
+                             validator="#{tagController.validateName}"/>
+                <p:message for="@previous" />
+
+                <h:outputText value="Posts:" rendered="#{tagController.mode eq 'Edit' }" />
+                <h:panelGroup id="postList" rendered="#{tagController.mode eq 'Edit' }" >
+
+                    <ui:repeat value="#{tagBean.posts}" var="post" >
+                        #{post.title}<br/>
+                    </ui:repeat>
+
+                </h:panelGroup>
+                <p:message for="@previous" rendered="#{tagController.mode eq 'Edit' }" />
+
+            </p:panelGrid>
+
+            <p:commandButton icon="fa fa-check" value="Save" title="add the new Tag" 
+                             rendered="#{tagController.mode eq 'Add'}"
+                             action="#{tagController.addTag}"
+                             update="@form" />
+
+            <p:commandButton icon="fa fa-check" value="Save" title="edit the new Tag" 
+                             rendered="#{tagController.mode eq 'Edit'}"
+                             action="#{tagController.editTag}"
+                             update="@form" />
+
+
+            <p:panelGrid columns="2" rendered="#{tagController.mode eq 'Delete' or tagController.mode eq 'View'}">
+
+                <h:outputText value="Id:" />
+                #{tagBean.id}
+
+                <h:outputText value="Name:" />
+                #{tagBean.name}
+
+                <h:outputText value="Posts:" />
+                <h:panelGroup >
+
+                    <ui:repeat value="#{tagBean.posts}" var="post" >
+                        #{post.title}<br/>
+                    </ui:repeat>
+
+                </h:panelGroup>
+
+            </p:panelGrid>
+
+
+            <p:commandButton icon="fa fa-trash" value="Delete" title="delete the tag" 
+                             rendered="#{tagController.mode eq 'Delete'}"
+                             disabled="#{tagController.deleteActionDisabled}"
+                             action="#{tagController.deleteTag}" update="@form" />
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

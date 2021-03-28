@@ -1,0 +1,67 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Condiment Maintenance
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Condiment Maintenance</h1>
+        <br/>
+        
+        <h:form>
+            <p:dataTable value="#{condimentCatalog}" var="condiment" >
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{condimentListController.editAction}"
+                                         icon="fa fa-pencil" title="edit the condiment" >
+                            <f:setPropertyActionListener value="#{condiment}" target="#{condimentListController.selectedCondiment}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                        <p:commandButton action="#{condimentListController.deleteAction}"
+                                         icon="fa fa-times" title="delete the condiment" >
+                            <f:setPropertyActionListener value="#{condiment}" target="#{condimentListController.selectedCondiment}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+                    
+                <p:column headerText="Id" style="width:80px;">
+                    #{condiment.id}
+                </p:column>
+                
+                <p:column headerText="Name" >
+                    <p:commandLink action="#{condimentListController.viewAction}" title="view the Condiment" >
+                        #{condiment.name}
+                        <f:setPropertyActionListener value="#{condiment}" target="#{condimentListController.selectedCondiment}" />
+                    </p:commandLink>
+                </p:column>
+                
+<!--
+<p:column headerText="Drinks">
+
+                    <ui:repeat var="drink" value="#{condiment.drinks}" varStatus="status">
+                        #{status.index eq 0 ? "":"; "}#{drink.name}
+                    </ui:repeat>
+
+                </p:column>
+-->                
+            </p:dataTable>
+            <p:commandButton value="New" icon="fa fa-plus" 
+                             action="#{condimentListController.addAction}">
+                <p:ajax event="dialogReturn" update="@form" />
+            </p:commandButton>
+            
+            <p:commandButton value="Maintain Drinks" icon="pi pi-list" 
+                             immediate="true"
+                             action="drinkList" style="float: right"/>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

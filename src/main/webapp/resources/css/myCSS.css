@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28 Oct 2020, 18:04:29
+    Author     : sjbro
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F1F1F1;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 0.8em;
+    color:#363636;
+}
+
+.layout-error-info {
+    color: red;
+}
+
+.layout-error-name {
+    color: red;
+    font-weight: bold;
+}

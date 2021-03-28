@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Database Sequence test
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Database Sequence Test</h1>
+        
+        <h:form id="myForm" >
+            <p:dataTable id="mlTab" var="msg" style="margin-bottom:20px"
+                         value="#{messageLogListController.messageList}"
+                         multiViewState="true"
+                         paginator="true" rows="10" paginatorPosition="both"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,15,20,50,100,1000"
+                         >
+
+                <f:facet name="header" >
+                    Message Log
+                </f:facet>
+                <f:facet name="paginatorTopLeft">
+                    <p:commandButton icon="pi pi-refresh" title="refresh the table"
+                                     update="@form" action="#{messageLogListController.refreshAction}"/>
+                </f:facet>                
+                <f:facet name="paginatorTopRight" >
+                    <p:commandButton id="toggler" type="button" value="Columns" 
+                                     style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="mlTab" trigger="toggler" />
+                </f:facet>
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{messageLogListController.editAction}"
+                                         icon="fa fa-pencil" title="edit the Message" >
+                            <f:setPropertyActionListener value="#{msg}" target="#{messageLogListController.selectedMessagelog}" />
+                            <p:ajax event="dialogReturn" update="@form"
+                                    listener="#{messageLogListController.onEditReturn}"/>
+                        </p:commandButton>
+                        <p:commandButton action="#{messageLogListController.deleteAction}"
+                                         icon="fa fa-times" title="delete the Message" >
+                            <f:setPropertyActionListener value="#{msg}" target="#{messageLogListController.selectedMessagelog}" />
+                            <p:ajax event="dialogReturn" update="@form"
+                                    listener="#{messageLogListController.onDeleteReturn}"/>
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+
+                <p:column headerText="Id" >
+                    #{msg.messageid}
+                </p:column>
+
+                <p:column headerText="Message text" >
+                    #{msg.message}
+                </p:column>
+
+                <p:column headerText="Created on" >
+                    #{msg.created}
+                </p:column>
+
+                <p:column headerText="Created by" >
+                    #{msg.createdby}
+                </p:column>
+
+            </p:dataTable>
+            
+            <p:commandButton icon="fa fa-plus" value="New" title="create a new code"
+                             action="#{messageLogListController.addAction}" >
+                <p:ajax event="dialogReturn" update="@form"
+                        listener="#{messageLogListController.onAddReturn}"/>
+            </p:commandButton>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

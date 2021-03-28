@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        log in
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Log In</h1>
+
+        <h:form>
+
+            <h:panelGrid columns="3" rendered="#{!login.loggedIn}">
+                <f:validateBean>
+                    <h:outputLabel for="@next">Username:</h:outputLabel>
+                    <h:inputText id="username" value="#{credentials.username}"/>
+                    <h:message for="@previous" style="color:red;"/>
+
+                    <h:outputLabel for="@next">Password:</h:outputLabel>
+                    <h:inputSecret id="password" value="#{credentials.password}"
+                                   converter="charArrayConverter"
+                                   />
+                    <h:message for="@previous" style="color:red;" />
+                </f:validateBean>
+            </h:panelGrid>
+
+            <h:panelGroup rendered="#{login.loggedIn}">
+                Signed in as #{currentUser.username}
+                <br/>
+            </h:panelGroup>
+            <h:messages globalOnly="true" style="color:red;" />
+            <h:commandButton value="Login" action="#{login.login}" rendered="#{!login.loggedIn}"/>
+            <h:commandButton value="Logout" action="#{login.logout}" rendered="#{login.loggedIn}"/>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

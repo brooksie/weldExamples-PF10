@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/dlgTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        #{codetypesController.mode} a Codetype
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:focus />
+            <p:growl globalOnly="true" />
+            
+            <p:panelGrid columns="3" rendered="#{codetypesController.mode eq 'Add' or codetypesController.mode eq 'Edit' }" >
+                
+                <p:outputLabel for="a_ct" value="Code type:" />
+                <h:panelGroup >
+                    <h:panelGroup  rendered="#{codetypesController.mode eq 'Add'}">
+                        <p:inputText id="a_ct" value="#{codetypeBean.codetype}" 
+                                     validator="#{codetypesController.validateNewCodetype}" >
+                            <f:validateRegex pattern="[A-Z0-9]+" />
+                            <p:ajax update="@this a_ctMsg" />
+                        </p:inputText>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{codetypesController.mode eq 'Edit'}" >
+                        #{codetypeBean.codetype}
+                    </h:panelGroup>
+                </h:panelGroup>
+                <p:message for="a_ct" id="a_ctMsg" />
+
+                <p:outputLabel for="@next" value="Description" />
+                <p:inputText id="a_desc" value="#{codetypeBean.description}" />
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Code Regex" title="regex pattern for the codes of this code type"/>
+                <p:inputText id="a_regex" value="#{codetypeBean.regex}"
+                             title="regex pattern for the codes of this code type"
+                             validator="#{codetypesController.validateRegexPattern}" >
+                    <p:ajax update="@this @next" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 1 Name" />
+                <p:inputText id="a_ex1name" value="#{codetypeBean.extra1name}" 
+                             validator="#{codetypesController.validateExtra1Name}" >
+                    <p:ajax listener="#{codetypesController.extra1NameChanged}" 
+                            update="@this @next a_ex1regex" 
+                            process="@this a_ex1regex" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 1 Regex" />
+                <p:inputText id="a_ex1regex" value="#{codetypeBean.extra1regex}" 
+                             validator="#{codetypesController.validateRegexPattern}"
+                             disabled="#{codetypesController.extra1RegexDisabled}" >
+                    <p:ajax process="@this" update="@this @next" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 2 Name" />
+                <p:inputText id="a_ex2name" value="#{codetypeBean.extra2name}" 
+                             validator="#{codetypesController.validateExtra2Name}" >
+                    <p:ajax listener="#{codetypesController.extra2NameChanged}" 
+                            update="@this @next a_ex2regex" 
+                            process="@this a_ex2regex" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 2 Regex" />
+                <p:inputText id="a_ex2regex" value="#{codetypeBean.extra2regex}" 
+                             validator="#{codetypesController.validateRegexPattern}"
+                             disabled="#{codetypesController.extra2RegexDisabled}">
+                    <p:ajax process="@this" update="@this @next" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 3 Name" />
+                <p:inputText id="a_ex3name" value="#{codetypeBean.extra3name}" 
+                             validator="#{codetypesController.validateExtra3Name}" >
+                    <p:ajax listener="#{codetypesController.extra3NameChanged}" 
+                            update="@this @next a_ex3regex" 
+                            process="@this a_ex3regex" />
+                </p:inputText>
+                <p:message for="@previous" />
+                
+                <p:outputLabel for="@next" value="Extra 3 Regex" />
+                <p:inputText id="a_ex3regex" value="#{codetypeBean.extra3regex}" 
+                             validator="#{codetypesController.validateRegexPattern}"
+                             disabled="#{codetypesController.extra3RegexDisabled}">
+                    <p:ajax process="@this" update="@this @next" />
+                </p:inputText>
+                <p:message for="@previous" />
+                                
+            </p:panelGrid>
+            
+            <p:commandButton icon="fa fa-check" value="Save" title="add the new code type" 
+                             action="#{codetypesController.addCodetype}"
+                             update="@form"
+                             rendered="#{codetypesController.mode eq 'Add'}"/>
+            
+            <p:commandButton icon="fa fa-check" value="Save" title="edit the new code type" 
+                             action="#{codetypesController.editCodetype}"
+                             update="@form"
+                             rendered="#{codetypesController.mode eq 'Edit'}"/>
+
+            
+            <p:panelGrid columns="2" rendered="#{codetypesController.mode eq 'Delete' or codetypesController.mode eq 'View'}">
+                
+                <h:outputText value="Code:" />
+                #{codetypeBean.codetype}
+                
+                <h:outputText value="Description" />
+                #{codetypeBean.description}
+                
+                <h:outputText value="Regex" />
+                #{codetypeBean.regex}
+                
+                <h:outputText value="Extra 1 Name" />
+                #{codetypeBean.extra1name}
+                
+                <h:outputText value="Extra 1 Regex" />
+                #{codetypeBean.extra1regex}
+                
+                <h:outputText value="Extra 2 Name" />
+                #{codetypeBean.extra2name}
+                
+                <h:outputText value="Extra 2 Regex" />
+                #{codetypeBean.extra2regex}
+                
+                <h:outputText value="Extra 3 Name" />
+                #{codetypeBean.extra3name}
+                
+                <h:outputText value="Extra 3 Regex" />
+                #{codetypeBean.extra3regex}
+                
+            </p:panelGrid>
+            
+            <p:commandButton icon="fa fa-trash" value="Delete" title="delete the code type" 
+                             action="#{codetypesController.deleteCodetype}"
+                             update="@form"
+                             rendered="#{codetypesController.mode eq 'Delete'}"/>
+            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

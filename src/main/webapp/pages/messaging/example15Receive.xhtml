@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">
+        Receive Message
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="frm">
+            <p:growl />
+            <p:focus />
+            <p:commandButton value="Receive message" icon="fa fa-inbox" 
+                             action="#{example15ReceiveController.receiveMessage}"
+                             update="@form"
+                             />
+            
+            <p></p>
+            
+            <p:panelGrid columns="2" >
+                <h:outputText value="Received:" />
+                #{example15ReceiveController.inboundMessage}
+            </p:panelGrid>
+            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Example 11c
+    </ui:define>
+
+    <ui:define name="head"/>
+
+    <ui:define name="content">
+
+        <h:form id="searchfrm" >
+
+            <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" >
+                <p:outputLabel for="@next" value="Code type:" />
+                <p:selectOneMenu id="ctSelection" value="#{example11bController.selectedCodetypeCode}" 
+                                 converter="omnifaces.SelectItemsConverter" >
+                    <f:selectItem itemLabel="Select one..." noSelectionOption="true" />
+                    <f:selectItem itemLabel="*All*" itemValue="*" />
+                    <f:selectItems value="#{codetypesList}" 
+                                   var="ct" itemValue="#{ct.codetype}" itemLabel="#{ct.codetype}"
+                                   itemDescription="#{ct.description}"/>
+                    <p:ajax listener="#{example11bController.searchAction}" 
+                            update="@form :mainfrm" />
+                </p:selectOneMenu>
+                <p:message for="@previous" />
+            </p:panelGrid>
+
+        </h:form>
+
+
+        <h:form id="mainfrm" >
+            <p:dataTable id="cdTab" var="cd" style="margin-bottom:20px" 
+                         value="#{codesList}"
+                         multiViewState="true"
+                         filteredValue="#{example11bController.filteredCodeList}"
+                         emptyMessage="No code found with the given criteria"
+                         paginator="true" rows="10" paginatorPosition="both"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,15,20,50,100,1000"
+                         >
+
+                <f:facet name="header" >
+                    Codes
+                </f:facet>
+                <f:facet name="paginatorTopLeft">
+                    <p:commandButton icon="pi pi-refresh" title="refresh the table"
+                                     update="@form" />
+                </f:facet>                
+                <f:facet name="paginatorTopRight" >
+                    <p:commandButton id="toggleCmd" icon="pi pi-align-justify" type="button" value="Columns" 
+                                     style="float:right"  />
+                    <p:columnToggler datasource="cdTab" trigger="toggleCmd" />
+                </f:facet>
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{example11bController.editAction}"
+                                         icon="fa fa-pencil" title="edit the code" >
+                            <f:setPropertyActionListener value="#{cd}" target="#{example11bController.selectedCode}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                        <p:commandButton action="#{example11bController.deleteAction}"
+                                         icon="fa fa-times" title="delete the code" >
+                            <f:setPropertyActionListener value="#{cd}" target="#{example11bController.selectedCode}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+
+                <p:column headerText="ID" width="40"
+                          sortBy="#{cd.codeid}" 
+                          filterBy="#{cd.codeid}" filterMatchMode="contains" >
+                    #{cd.codeid}
+                </p:column>
+
+                <p:column headerText="Type" width="80"
+                          sortBy="#{cd.codetypeid.codetype}"
+                          filterBy="#{cd.codetypeid.codetype}" filterMatchMode="contains" >
+                    #{cd.codetypeid.codetype}
+                </p:column>
+
+                <p:column headerText="Code" width="80" toggleable="false"
+                          sortBy="#{cd.code}"
+                          filterBy="#{cd.code}" filterMatchMode="contains" >
+                    <p:commandLink action="#{example11bController.viewAction}" title="view details">
+                        #{cd.code}
+                        <f:setPropertyActionListener value="#{cd}" target="#{example11bController.selectedCode}" />
+                    </p:commandLink>
+                </p:column>
+
+                <p:column headerText="Desc" sortBy="#{cd.description}"
+                          filterBy="#{cd.description}" filterMatchMode="contains">
+                    #{cd.description}
+                </p:column>
+
+                <p:column headerText="Sort Order" width="100"
+                          sortBy="#{cd.sortorder}" >
+                    #{cd.sortorder}
+                </p:column>
+
+                <p:column headerText="Extra 1" sortBy="#{cd.extra1}"
+                          filterBy="#{cd.extra1}" filterMatchMode="contains"
+                          visible="false">
+                    #{cd.extra1}
+                </p:column>
+
+                <p:column headerText="Extra 2" sortBy="#{cd.extra2}"
+                          filterBy="#{cd.extra2}" filterMatchMode="contains"
+                          visible="false">
+                    #{cd.extra2}
+                </p:column>
+
+                <p:column headerText="Extra 3" sortBy="#{cd.extra3}"
+                          filterBy="#{cd.extra3}" filterMatchMode="contains" 
+                          visible="false">
+                    #{cd.extra3}
+                </p:column>
+
+                <p:column headerText="Valid from" sortBy="#{cd.validfrom}"
+                          filterBy="#{cd.validfrom}" filterMatchMode="startsWith"
+                          visible="false">
+                    #{cd.validfrom}
+                </p:column>
+
+                <p:column headerText="Valid to" sortBy="#{cd.validto}"
+                          filterBy="#{cd.validto}" filterMatchMode="startsWith"
+                          visible="false">
+                    #{cd.validto}
+                </p:column>
+
+            </p:dataTable>
+
+            <p:commandButton icon="fa fa-plus" value="New" title="create a new code"
+                             action="#{example11bController.addAction}" 
+                             disabled="#{empty example11bController.selectedCodetypeCode}">
+                <p:ajax event="dialogReturn" update="@form" />
+            </p:commandButton>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

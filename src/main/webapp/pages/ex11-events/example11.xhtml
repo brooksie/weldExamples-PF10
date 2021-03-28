@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Example 11 - Events
+    </ui:define>
+
+    <ui:define name="head">
+        <style type="text/css" >
+            .cCol { width: 150px;
+                    display: table; 
+                    margin: 10px auto;}
+
+            .ui-panelgrid.showcase-text-align-center .ui-grid-responsive .ui-panelgrid-cell {
+                text-align: center;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="growl"/>
+
+            <p:panel header="Maintenance" style="margin: 5em 5em; width: 500px;">
+                <p:panelGrid columns="3" layout="grid" styleClass="showcase-text-align-center"
+                             columnClasses="cCol, cCol, cCol">
+
+                    <p:commandLink action="example11a" >
+                        <i class="fa fa-code" style="font-size: 6em;" />
+                        <br/>Code Types
+                    </p:commandLink>
+
+                    <p:commandLink action="example11b"
+                                   update="growl" >
+                        <i class="fa fa-list" style="font-size: 6em;" />
+                        <br/>Codes
+                    </p:commandLink>
+
+                    <p:commandLink action="#{example11Controller.doAction('Settings')}"
+                                   update="growl">
+                        <i class="fa fa-cog" style="font-size: 6em;" />
+                        <br/>Settings
+                    </p:commandLink>
+
+                    <p:commandLink action="#{example11Controller.doAction('Upload')}"
+                                   update="growl">
+                        <i class="pi pi-upload" style="font-size: 6em;" />
+                        <br/>Upload
+                    </p:commandLink>
+
+                    <p:commandLink action="#{example11Controller.doAction('Download')}"
+                                   update="growl">
+                        <i class="pi pi-download" style="font-size: 6em;" />
+                        <br/>Download
+                    </p:commandLink>
+
+                    <p:commandLink action="#{example11Controller.doAction('Calendar')}"
+                                   update="growl">
+                        <i class="pi pi-calendar" style="font-size: 6em;" />
+                        <br/>Calendar
+                    </p:commandLink>
+
+                </p:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

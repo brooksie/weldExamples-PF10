@@ -1,0 +1,67 @@
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Many-To-Many Example
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Many To Many Example</h1>
+        <br/>
+
+        <h:form>
+            <p:dataTable value="#{postCatalog}" var="post" >
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{postListController.editAction}"
+                                         icon="fa fa-pencil" title="edit the post" >
+                            <f:setPropertyActionListener value="#{post}" target="#{postListController.selectedPost}" />
+                            <p:ajax event="dialogReturn" update="@form" 
+                                    listener="#{postListController.onEditReturn}"/>
+                        </p:commandButton>
+                        <p:commandButton action="#{postListController.deleteAction}"
+                                         icon="fa fa-times" title="delete the post" >
+                            <f:setPropertyActionListener value="#{post}" target="#{postListController.selectedPost}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+                    
+                <p:column headerText="Id" style="width:80px;">
+                    #{post.id}
+                </p:column>
+                
+                <p:column headerText="Title" >
+                    <p:commandLink action="#{postListController.viewAction}" title="view the post" >
+                        #{post.title}
+                        <f:setPropertyActionListener value="#{post}" target="#{postListController.selectedPost}" />
+                    </p:commandLink>
+                </p:column>
+
+                <p:column headerText="Tags">
+
+                    <ui:repeat var="tag" value="#{post.tags}" varStatus="status">
+                        #{status.index eq 0 ? "":"; "}#{tag.name}
+                    </ui:repeat>
+
+                </p:column>
+                
+            </p:dataTable>
+            <p:commandButton value="New" icon="fa fa-plus" 
+                             action="#{postListController.addAction}">
+                <p:ajax event="dialogReturn" update="@form" 
+                        listener="#{postListController.onAddReturn}" />
+            </p:commandButton>
+            
+            <p:commandButton value="Maintain Tags" icon="pi pi-cog" 
+                             immediate="true"
+                             action="tagList" style="float: right"/>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

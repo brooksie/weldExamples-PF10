@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/appTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Example 11a
+    </ui:define>
+
+    <ui:define name="head"/>
+
+    <ui:define name="content">
+        <h:form id="myForm" >
+            <p:dataTable id="ctTab" var="ct" style="margin-bottom:20px"
+                         value="#{example11aController.codetypeList}"
+                         multiViewState="true"
+                         filteredValue="#{example11aController.filteredCodetypeList}"
+                         emptyMessage="No code types found with the given criteria"
+                         paginator="true" rows="10" paginatorPosition="both"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,15,20,50,100,1000"
+                         >
+
+                <f:facet name="header" >
+                    Code Types
+                </f:facet>
+                <f:facet name="paginatorTopLeft">
+                    <p:commandButton icon="pi pi-refresh" title="refresh the table"
+                                     update="@form" />
+                </f:facet>                
+                <f:facet name="paginatorTopRight" >
+                    <p:commandButton id="toggler" type="button" value="Columns" 
+                                     style="float:right" icon="pi pi-align-justify" />
+                    <p:columnToggler datasource="ctTab" trigger="toggler" />
+                </f:facet>
+
+                <p:column style="width:64px;text-align: center; padding-left: 1px; padding-right: 1px;" toggleable="false">
+                    <h:panelGroup>
+                        <p:commandButton action="#{example11aController.editAction}"
+                                         icon="fa fa-pencil" title="edit the codetype" >
+                            <f:setPropertyActionListener value="#{ct}" target="#{example11aController.selectedCodetype}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                        <p:commandButton action="#{example11aController.deleteAction}"
+                                         icon="fa fa-times" title="delete the codetype" >
+                            <f:setPropertyActionListener value="#{ct}" target="#{example11aController.selectedCodetype}" />
+                            <p:ajax event="dialogReturn" update="@form" />
+                        </p:commandButton>
+                    </h:panelGroup>
+                </p:column>
+
+                <p:column headerText="ID" sortBy="#{ct.codetypeid}" width="40"
+                          filterBy="#{ct.codetypeid}" filterMatchMode="contains" >
+                    #{ct.codetypeid}
+                </p:column>
+
+                <p:column headerText="name" sortBy="#{ct.codetype}" width="70"
+                          filterBy="#{ct.codetype}" filterMatchMode="contains"
+                          toggleable="false">
+                    <p:commandLink action="#{example11aController.viewAction}" title="view details">
+                        #{ct.codetype}
+                        <f:setPropertyActionListener value="#{ct}" target="#{example11aController.selectedCodetype}" />
+                    </p:commandLink>
+                </p:column>
+
+                <p:column headerText="Desc" sortBy="#{ct.description}"
+                          filterBy="#{ct.description}" filterMatchMode="contains">
+                    #{ct.description}
+                </p:column>
+
+                <p:column headerText="Regex" sortBy="#{ct.regex}">
+                    #{ct.regex}
+                </p:column>
+
+                <p:column headerText="Extra 1 Name" sortBy="#{ct.extra1name}"
+                          filterBy="#{ct.extra1name}" filterMatchMode="contains"
+                          visible="false">
+                    #{ct.extra1name}
+                </p:column>
+                <p:column headerText="Extra 1 Regex" sortBy="#{ct.extra1regex}"
+                          visible="false">
+                    #{ct.extra1regex}
+                </p:column>
+
+                <p:column headerText="Extra 2 Name" sortBy="#{ct.extra2name}"
+                          filterBy="#{ct.extra2name}" filterMatchMode="contains"
+                          visible="false">
+                    #{ct.extra2name}
+                </p:column>
+                <p:column headerText="Extra 2 Regex" sortBy="#{ct.extra2regex}"
+                          visible="false">
+                    #{ct.extra2regex}
+                </p:column>
+
+                <p:column headerText="Extra 3 Name" sortBy="#{ct.extra3name}"
+                          filterBy="#{ct.extra3name}" filterMatchMode="contains" 
+                          visible="false">
+                    #{ct.extra3name}
+                </p:column>
+                <p:column headerText="Extra 3 Regex" sortBy="#{ct.extra3regex}" 
+                          visible="false">
+                    #{ct.extra3regex}
+                </p:column>
+
+            </p:dataTable>
+
+            <p:commandButton icon="fa fa-plus" value="New" title="create a new codetype"
+                             action="#{example11aController.addAction}" >
+                <p:ajax event="dialogReturn" update="@form" />
+            </p:commandButton>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
